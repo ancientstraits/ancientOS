@@ -42,7 +42,7 @@ ifeq ($(TOOLCHAIN),llvm)
 endif
 
 # User controllable C flags.
-CFLAGS := -g -O2 -pipe
+CFLAGS := -g -O2 -pipe -masm=intel
 
 # User controllable C preprocessor flags. We set none by default.
 CPPFLAGS :=
@@ -202,6 +202,7 @@ bin-$(ARCH)/$(OUTPUT): GNUmakefile linker-scripts/$(ARCH).lds $(OBJ)
 # Compilation rules for *.c files.
 obj-$(ARCH)/%.c.o: %.c GNUmakefile
 	mkdir -p "$(dir $@)"
+	echo skibidiah
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.S files.

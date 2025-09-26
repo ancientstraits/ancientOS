@@ -9,6 +9,8 @@ QEMUFLAGS := -m 2G
 
 override IMAGE_NAME := template-$(ARCH)
 
+override TOOLCHAIN := LLVM
+
 # Toolchain for building the 'limine' executable for the host.
 HOST_CC := cc
 HOST_CFLAGS := -g -O2 -pipe
