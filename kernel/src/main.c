@@ -128,7 +128,7 @@ void kmain(void) {
     pic_set_irq_keyboard_mask();
     puts("PIC setup done.");
 
-    // idt_set_descriptor(33, i8042_interrupt_handler, 0x8E);
+    idt_set_descriptor(33, i8042_interrupt_handler, 0x8E);
     puts("Loading IDT...");
     setup_idt();
     puts("IDT Loaded!");

@@ -32,7 +32,7 @@ static void flush() {
     puts("FLUSH END.");
 }
 
-void i8042_setup() {
+void i8042_setup(void) {
     // disable devices
     outb(I8042_STATCMD, 0xAD); // disable 1st PS/2 port
     outb(I8042_STATCMD, 0xA7); // disable 2nd PS/2 port
@@ -149,12 +149,16 @@ void i8042_setup() {
 }
 
 void i8042_interrupt_handler(void) {
+    puts("WHAT??? INTERRUPT REACH???");
+
     uint8_t status = inb(I8042_STATCMD);
+
     if (status & 1) {
         uint8_t scancode = inb(I8042_DATA);
+        puts("Byte is...");
         putbyte(scancode);
     }
-
-
+    puts("first first");
     outb(PIC1_CMD, PIC_EOI);
+    puts("second second");
 }

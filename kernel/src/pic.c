@@ -15,9 +15,9 @@ void pic_setup(void) {
     // PIC2 handles the last 8 interrupts
     // Interrupts 32 to 39 = for PIC1
     // Interrupts 40 to 47 = for PIC2
-    outb(PIC1_CMD, 32);
+    outb(PIC1_DATA, 32);
     io_wait();
-    outb(PIC2_CMD, 40);
+    outb(PIC2_DATA, 40);
     io_wait();
 
     // PIC1 is the master, PIC2 is the slave,
