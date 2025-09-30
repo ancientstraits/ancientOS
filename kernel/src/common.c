@@ -20,6 +20,16 @@ uint8_t inb(uint16_t io_port) {
 void pause(void) {
     __asm__ volatile("pause");
 }
+void io_wait(void) {
+    // this operation does nothing, but it gives a little delay
+    outb(0x80, 0);
+}
+void enable_interrupts(void) {
+    __asm__ volatile("sti");
+}
+void disable_interrupts(void) {
+    __asm__ volatile("cli");
+}
 
 void putchar(char c) {
     outb(QEMU_DEBUGCON, c);
@@ -62,4 +72,17 @@ void putlong(uint64_t num) {
     putchar('x');
     PUT64(num, 0);
     putchar('\n');    
+}
+
+// Halt and catch fire function.
+void hcf(void) {
+    for (;;) {
+#if defined (__x86_64__)
+        asm ("hlt");
+#elif defined (__aarch64__) || defined (__riscv)
+        asm ("wfi");
+#elif defined (__loongarch64)
+        asm ("idle 0");
+#endif
+    }
 }

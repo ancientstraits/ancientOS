@@ -9,6 +9,10 @@
 void outb(uint16_t io_port, uint8_t byte);
 uint8_t inb(uint16_t io_port);
 void pause(void);
+void hcf(void);
+void io_wait();
+void enable_interrupts(void);
+void disable_interrupts(void);
 
 // io functions
 void putchar(char c);

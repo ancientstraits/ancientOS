@@ -1,16 +1,16 @@
 global setup_gdt
 
-%define MAKE_GDT_DESCRIPTOR_UPPERHALF(base, limit, access_byte, flags) ( \
+%define MAKE_GDT_DESCRIPTOR_UPPER32(base, limit, access_byte, flags) ( \
         ((base >> 16) & 0x00FF) | (access_byte << 8) | (limit & 0xF0000) \
         | (flags << 20) | (base & 0xFF000000) \
     )
 
-%define MAKE_GDT_DESCRIPTOR_LOWERHALF(base, limit, access_byte, flags) \
+%define MAKE_GDT_DESCRIPTOR_LOWER32(base, limit, access_byte, flags) \
     ((limit & 0x0FFFF) | ((base << 16) & 0x0000FFFF))
 
 %define MAKE_GDT_DESCRIPTOR(base, limit, access_byte, flags) ( \
-        (MAKE_GDT_DESCRIPTOR_UPPERHALF(base, limit, access_byte, flags) << 32) \
-        | MAKE_GDT_DESCRIPTOR_LOWERHALF(base, limit, access_byte, flags) \
+        (MAKE_GDT_DESCRIPTOR_UPPER32(base, limit, access_byte, flags) << 32) \
+        | MAKE_GDT_DESCRIPTOR_LOWER32(base, limit, access_byte, flags) \
     )
 
 section .data
@@ -19,13 +19,13 @@ section .data
 ; gdt_print_end: db "GDT END",0
 
 gdt_start:
-dq 0 ; the null descriptor
-gdt_code_offset equ $ - gdt_start
-dq MAKE_GDT_DESCRIPTOR(0, 0xFFFFF, 0x9A, 0xA) ; kernel mode code segment
-gdt_data_offset equ $ - gdt_start
-dq MAKE_GDT_DESCRIPTOR(0, 0xFFFFF, 0x92, 0xC) ; kernel mode data segment
-dq MAKE_GDT_DESCRIPTOR(0, 0xFFFFF, 0xFA, 0xA) ; user   mode code segment
-dq MAKE_GDT_DESCRIPTOR(0, 0xFFFFF, 0xF2, 0xC) ; user   mode data segment
+    dq 0 ; the null descriptor
+    gdt_code_offset equ $ - gdt_start
+    dq MAKE_GDT_DESCRIPTOR(0, 0xFFFFF, 0x9A, 0xA) ; kernel mode code segment
+    gdt_data_offset equ $ - gdt_start
+    dq MAKE_GDT_DESCRIPTOR(0, 0xFFFFF, 0x92, 0xC) ; kernel mode data segment
+    dq MAKE_GDT_DESCRIPTOR(0, 0xFFFFF, 0xFA, 0xA) ; user   mode code segment
+    dq MAKE_GDT_DESCRIPTOR(0, 0xFFFFF, 0xF2, 0xC) ; user   mode data segment
 gdt_end:
 
 gdt_size equ gdt_end - gdt_start
